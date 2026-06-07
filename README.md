@@ -21,9 +21,9 @@ O desenvolvimento do projeto está dividido em duas etapas principais da discipl
 
 | Foto | Nome | Matrícula |
 | :---: | :---: | :---: |
-| <a href="https://github.com/kalipassos"><img src="https://github.com/kalipassos.png" width="100px;" alt="Foto kalipassos"/><br /><sub><b>@kalipassos</b></sub></a> | - | - |
-| <a href="https://github.com/SkywalkerSupreme"><img src="https://github.com/SkywalkerSupreme.png" width="100px;" alt="Foto SkywalkerSupreme"/><br /><sub><b>@SkywalkerSupreme</b></sub></a> | - | - |
-| <a href="https://github.com/west7"><img src="https://github.com/west7.png" width="100px;" alt="Foto west7"/><br /><sub><b>@west7</b></sub></a> | - | - |
+| <a href="https://github.com/kalipassos"><img src="https://github.com/kalipassos.png" width="100px;" alt="Foto kalipassos"/><br /><sub><b>@kalipassos</b></sub></a> | Kallyne Macedo Passos | 211061805 |
+| <a href="https://github.com/SkywalkerSupreme"><img src="https://github.com/SkywalkerSupreme.png" width="100px;" alt="Foto SkywalkerSupreme"/><br /><sub><b>@SkywalkerSupreme</b></sub></a> | Larissa Stéfane Barboza Santos | 211039573 |
+| <a href="https://github.com/west7"><img src="https://github.com/west7.png" width="100px;" alt="Foto west7"/><br /><sub><b>@west7</b></sub></a> | Guilherme Westphall | 211061805 |
 
 ---
 
