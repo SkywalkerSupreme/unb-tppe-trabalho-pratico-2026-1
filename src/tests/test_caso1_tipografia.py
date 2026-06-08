@@ -34,9 +34,9 @@ class TestCaso1Tipografia:
         (["Sergio Henrique Guaraldi"], ["Sergio Henrique Guaraldi"]),
         (["Sérgio Henrique Guaraldi"], ["Sérgio Henrique Guaraldi"]),
         (["Lilian Luiza Viana Vieira", "Lílian Luíza Viana Vieira"], ["Lílian Luíza Viana Vieira", "Lílian Luíza Viana Vieira"]),
-        (["Yuri Vieira Faria", "Yúri Vieira Faria"], ["Yuri Vieira Faria", "Yuri Vieira Faria"]),
-        (["Cassius de Souza", "Cássius de Souza"], ["Cassius de Souza", "Cassius de Souza"]),
-        (["Luiz Oliveira Souza", "Luíz Oliveira Souza"], ["Luiz Oliveira Souza", "Luiz Oliveira Souza"])
+        (["Yuri Vieira Faria", "Yúri Vieira Faria"], ["Yúri Vieira Faria", "Yúri Vieira Faria"]),
+        (["Cassius de Souza", "Cássius de Souza"], ["Cássius de Souza", "Cássius de Souza"]),
+        (["Luiz Oliveira Souza", "Luíz Oliveira Souza"], ["Luíz Oliveira Souza", "Luíz Oliveira Souza"])
     ])
     def test_acentuacao_predominante(self, lista_in, lista_out):
         assert self.curador.curar_tipografia(lista_in) == lista_out
