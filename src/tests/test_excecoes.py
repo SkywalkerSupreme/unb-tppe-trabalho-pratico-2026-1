@@ -1,52 +1,32 @@
 import pytest
-from src.curador import (
-    CuradorDados, 
-    DatasetInvalidoError, 
-    RegistroCorrompidoError, 
-    RegraNegocioVioladaError
-)
+from src.curador import Curador, FormatoInvalidoError, IdInvalidoError
 
 @pytest.mark.excecoes
-class TestSuiteExcecoesCuradoria:
+@pytest.mark.erros
+class TestExcecoesCurador:
 
-    def test_deve_lancar_excecao_se_o_dataset_estiver_vazio(self, dados_corrompidos_dinamicos):
-        dados_vazios = dados_corrompidos_dinamicos["dataset_vazio"]
-        with pytest.raises(DatasetInvalidoError):
-            CuradorDados(dados_vazios)
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        self.curador = Curador()
 
-    def test_deve_lancar_excecao_se_faltar_o_campo_id(self, dados_corrompidos_dinamicos):
-        dados_sem_id = dados_corrompidos_dinamicos["registro_sem_id"]
-        with pytest.raises(RegistroCorrompidoError):
-            curador = CuradorDados(dados_sem_id)
-            curador.processar_curadoria()
+    @pytest.mark.parametrize("dados_invalidos", [
+        ([{"nome": "Raphael Viana"}]),
+        ([{"id": "texto", "nome": "Ana Seabra"}]),
+        ([{"id": None, "nome": "Luiz Souza"}]),
+        ([{"id": 123}]),
+        ([])
+    ])
+    def test_excecao_formato_registro_invalido(self, dados_invalidos):
+        with pytest.raises(FormatoInvalidoError):
+            self.curador.processar_base_dados(dados_invalidos)
 
-    def test_deve_lancar_excecao_se_faltar_o_campo_nome(self, dados_corrompidos_dinamicos):
-        dados_sem_nome = dados_corrompidos_dinamicos["registro_sem_nome"]
-        with pytest.raises(RegistroCorrompidoError):
-            curador = CuradorDados(dados_sem_nome)
-            curador.processar_curadoria()
-
-    def test_deve_lancar_excecao_se_o_tipo_do_id_nao_for_inteiro(self, dados_corrompidos_dinamicos):
-        dados_id_string = dados_corrompidos_dinamicos["id_tipo_invalido"]
-        with pytest.raises(TypeError):
-            curador = CuradorDados(dados_id_string)
-            curador.processar_curadoria()
-
-    @pytest.mark.parametrize("chave_cenario", ["idade_negativa", "idade_extrema"])
-    def test_deve_lancar_excecao_para_idades_fora_do_limite_biologico(self, dados_corrompidos_dinamicos, chave_cenario):
-        dados_ruins = dados_corrompidos_dinamicos[chave_cenario]
-        with pytest.raises(RegraNegocioVioladaError):
-            curador = CuradorDados(dados_ruins)
-            curador.processar_curadoria()
-
-    def test_deve_lancar_excecao_se_o_email_nao_possuir_arroba(self, dados_corrompidos_dinamicos):
-        dados_ruins = dados_corrompidos_dinamicos["email_invalido"]
-        with pytest.raises(RegraNegocioVioladaError):
-            curador = CuradorDados(dados_ruins)
-            curador.processar_curadoria()
-
-    def test_deve_lancar_excecao_se_o_orcid_tiver_comprimento_errado(self, dados_corrompidos_dinamicos):
-        dados_ruins = dados_corrompidos_dinamicos["orcid_curto"]
-        with pytest.raises(RegraNegocioVioladaError):
-            curador = CuradorDados(dados_ruins)
-            curador.processar_curadoria()
+    @pytest.mark.parametrize("registro_id_invalido", [
+        ([{"id": -5, "nome": "Sérgio Guaraldi"}]),
+        ([{"id": 0, "nome": "Vanilda Junior"}]),
+        ([{"id": -746938, "nome": "Raphael Viana"}]),
+        ([{"id": -1, "nome": "Cassius de Souza"}]),
+        ([{"id": -10074, "nome": "Moreira V O"}])
+    ])
+    def test_excecao_id_negativo_ou_zero(self, registro_id_invalido):
+        with pytest.raises(IdInvalidoError):
+            self.curador.processar_base_dados(registro_id_invalido)

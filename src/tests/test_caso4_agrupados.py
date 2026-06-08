@@ -1,33 +1,55 @@
 import pytest
-from src.curador import LimpadorIniciaisAgrupadas
+from src.curador import Curador
 
 @pytest.mark.caso4
-class TestSuiteCaso4IniciaisAgrupadas:
-    """Suíte para o Caso 4: Iniciais agrupadas (SH, VC)."""
+@pytest.mark.agrupados
+class TestCaso4Agrupados:
 
-    @pytest.mark.parametrize("autor_id, descricao_cenario", [
-        (44179, "SH Guaraldi - Iniciais de Sérgio Henrique"),
-        (70946, "SH Guaraldi - Segunda ocorrência"),
-        (51505, "VC Junior - Iniciais de Vanilda Cristina"),
-        (45986, "VC Junior - Terceira ocorrência")
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        self.curador = Curador()
+
+    @pytest.mark.parametrize("lista_in, lista_out", [
+        (["VC Junior", "Vanilda Cristina Junior"], ["Vanilda Cristina Junior", "Vanilda Cristina Junior"]),
+        (["SH Guaraldi", "Sérgio Henrique Guaraldi"], ["Sérgio Henrique Guaraldi", "Sérgio Henrique Guaraldi"]),
+        (["AM Seabra", "Ana de Mattos Seabra"], ["Ana de Mattos Seabra", "Ana de Mattos Seabra"]),
+        (["CSouza", "Cassius de Souza"], ["Cassius de Souza", "Cassius de Souza"]),
+        (["VOMoreira", "Verônica de Oliveira Moreira"], ["Verônica de Oliveira Moreira", "Verônica de Oliveira Moreira"]),
+        (["LOSouza", "Luiz de Oliveira de Souza"], ["Luiz de Oliveira de Souza", "Luiz de Oliveira de Souza"]),
+        (["LLVVieira", "Lílian Luíza Viana Vieira"], ["Lílian Luíza Viana Vieira", "Lílian Luíza Viana Vieira"]),
+        (["YVFaria", "Yuri Vieira Faria"], ["Yuri Vieira Faria", "Yuri Vieira Faria"]),
+        (["MHSant'anna", "Mônica Hirata Sant'anna"], ["Mônica Hirata Sant'anna", "Mônica Hirata Sant'anna"]),
+        (["RGViana", "Raphael Gonçalves Viana"], ["Raphael Gonçalves Viana", "Raphael Gonçalves Viana"])
     ])
-    def test_deve_identificar_e_expandir_iniciais_agrupadas_do_json(self, datasets, autor_id, descricao_cenario):
-        dados_ruins, gabarito = datasets
-        
-        registro_sujo = next(item for item in dados_ruins if item["id"] == autor_id)
-        registro_gabarito = next((item for item in gabarito if item["nome_original"] == registro_sujo["nome"]), None)
-        
-        assert registro_gabarito is not None, f"Erro: Nome '{registro_sujo['nome']}' não mapeado no gabarito."
-        
-        limpador = LimpadorIniciaisAgrupadas()
-        nome_processado = limpador.expandir_agrupados(registro_sujo["nome"])
-        
-        assert nome_processado == registro_gabarito["nome_canonico"]
+    def test_iniciais_agrupadas_sem_espaco(self, lista_in, lista_out):
+        assert self.curador.curar_agrupados(lista_in) == lista_out
 
-    def test_deve_garantir_comprimento_minimo_do_nome_expandido(self, datasets):
-        dados_ruins, _ = datasets
-        limpador = LimpadorIniciaisAgrupadas()
-        for registro in dados_ruins[:100]:
-            if "SH" in registro["nome"] or "VC" in registro["nome"]:
-                nome_corrigido = limpador.expandir_agrupados(registro["nome"])
-                assert len(nome_corrigido) > 5
+    @pytest.mark.parametrize("lista_in, lista_out", [
+        (["V.C. Junior", "Vanilda Cristina Junior"], ["Vanilda Cristina Junior", "Vanilda Cristina Junior"]),
+        (["S.H. Guaraldi", "Sérgio Henrique Guaraldi"], ["Sérgio Henrique Guaraldi", "Sérgio Henrique Guaraldi"]),
+        (["A.M. Seabra", "Ana de Mattos Seabra"], ["Ana de Mattos Seabra", "Ana de Mattos Seabra"]),
+        (["C.S. Souza", "Cassius de Souza"], ["Cassius de Souza", "Cassius de Souza"]),
+        (["V.O.M. Moreira", "Verônica de Oliveira Moreira"], ["Verônica de Oliveira Moreira", "Verônica de Oliveira Moreira"]),
+        (["L.O. Souza", "Luiz de Oliveira de Souza"], ["Luiz de Oliveira de Souza", "Luiz de Oliveira de Souza"]),
+        (["L.L.V. Vieira", "Lílian Luíza Viana Vieira"], ["Lílian Luíza Viana Vieira", "Lílian Luíza Viana Vieira"]),
+        (["Y.V. Faria", "Yuri Vieira Faria"], ["Yuri Vieira Faria", "Yuri Vieira Faria"]),
+        (["M.H. Sant'anna", "Mônica Hirata Sant'anna"], ["Mônica Hirata Sant'anna", "Mônica Hirata Sant'anna"]),
+        (["R.G. Viana", "Raphael Gonçalves Viana"], ["Raphael Gonçalves Viana", "Raphael Gonçalves Viana"])
+    ])
+    def test_iniciais_agrupadas_com_pontos(self, lista_in, lista_out):
+        assert self.curador.curar_agrupados(lista_in) == lista_out
+
+    @pytest.mark.parametrize("lista_in, lista_out", [
+        (["vc junior", "Vanilda Cristina Junior"], ["Vanilda Cristina Junior", "Vanilda Cristina Junior"]),
+        (["sh guaraldi", "Sérgio Henrique Guaraldi"], ["Sérgio Henrique Guaraldi", "Sérgio Henrique Guaraldi"]),
+        (["am seabra", "Ana de Mattos Seabra"], ["Ana de Mattos Seabra", "Ana de Mattos Seabra"]),
+        (["c.s. de souza", "Cassius de Souza"], ["Cassius de Souza", "Cassius de Souza"]),
+        (["v.o. moreira", "Verônica de Oliveira Moreira"], ["Verônica de Oliveira Moreira", "Verônica de Oliveira Moreira"]),
+        (["l.o. de souza", "Luiz de Oliveira de Souza"], ["Luiz de Oliveira de Souza", "Luiz de Oliveira de Souza"]),
+        (["l.l.v. vieira", "Lílian Luíza Viana Vieira"], ["Lílian Luíza Viana Vieira", "Lílian Luíza Viana Vieira"]),
+        (["y.v. faria", "Yuri Vieira Faria"], ["Yuri Vieira Faria", "Yuri Vieira Faria"]),
+        (["m.h. sant'anna", "Mônica Hirata Sant'anna"], ["Mônica Hirata Sant'anna", "Mônica Hirata Sant'anna"]),
+        (["r.g. viana", "Raphael Gonçalves Viana"], ["Raphael Gonçalves Viana", "Raphael Gonçalves Viana"])
+    ])
+    def test_iniciais_agrupadas_caixa_baixa(self, lista_in, lista_out):
+        assert self.curador.curar_agrupados(lista_in) == lista_out
