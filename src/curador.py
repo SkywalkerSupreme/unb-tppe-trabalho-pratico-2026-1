@@ -31,7 +31,8 @@ class Curador:
 
     def limpar_apostrofos(self, texto):
         return (
-            texto.replace("`", "'")
+            texto.replace("\\`", "'")
+                 .replace("`", "'")
                  .replace("´", "'")
                  .replace("’", "'")
                  .replace("‘", "'")
@@ -48,6 +49,12 @@ class Curador:
 
             if p.lower() in PARTICULAS:
                 palavras.append(p.lower())
+            elif "'" in p:
+                prefix, _, suffix = p.partition("'")
+                # O' and D' prefixes are single-char: capitalize the independent word after.
+                # Multi-char prefixes like Sant' are compound: lowercase the ending.
+                suffix_norm = suffix.capitalize() if len(prefix) == 1 else suffix.lower()
+                palavras.append(prefix.capitalize() + "'" + suffix_norm)
             else:
                 palavras.append(p.capitalize())
 
