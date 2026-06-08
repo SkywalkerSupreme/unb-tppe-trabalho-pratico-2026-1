@@ -119,6 +119,9 @@ class Curador:
 
         score += nome.count(" de ") * 5
 
+        # Each dot signals an abbreviation, making the name less complete.
+        score -= nome.count(".") * 10
+
         return score
 
     def melhor_nome(self, nomes):
@@ -153,7 +156,9 @@ class Curador:
 
     def curar_particulas(self, lista):
 
-        melhor = self.melhor_nome(lista)
+        normalizados = [self.normalizar_nome(x) for x in lista]
+
+        melhor = self.melhor_nome(normalizados)
 
         return [melhor] * len(lista)
 
