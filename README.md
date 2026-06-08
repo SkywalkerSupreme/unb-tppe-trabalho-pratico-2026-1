@@ -5,7 +5,7 @@
 Este projeto consiste no desenvolvimento de um sistema de **Curadoria e Deduplicação de Dados Científicos** para repositórios de instituições de pesquisa. O objetivo principal é integrar diferentes fontes de dados (como o Currículo Lattes, ACM, ScienceDirect, etc.), identificar registros duplicados de autores numa mesma publicação e unificá-los para um **padrão-ouro**.
 
 O desenvolvimento do projeto está estruturado com base na metodologia **TDD (Test-Driven Development)**, dividindo-se nas duas etapas principais da disciplina de Técnicas de Programação para Plataformas Emergentes (TPPE):
-1. **Etapa 1 (TDD):** Implementação das unidades de código totalmente guiada por testes unitários automatizados (Fase RED/GREEN). **[Concluída]**
+1. **Etapa 1 (TDD):** Implementação das unidades de código totalmente guiada por testes unitários automatizados (Fase RED/GREEN). 
 2. **Etapa 2 (Refactoring):** Aplicação de operações de refatoração para melhoria contínua da arquitetura e qualidade do código.
 
 ### Casos de Deduplicação Contemplados:
