@@ -68,7 +68,21 @@ class Curador:
 
         return nome
 
+    def _eh_inicial(self, token):
+        miolo = token.replace(".", "")
 
+        if not miolo:
+            return False
+
+        if len(miolo) == 1:
+            return True
+
+        # Iniciais aglutinadas: tudo maiusculo e curto
+        return miolo.isupper() and len(miolo) <= 3
+
+    def _expandir_iniciais(self, token):
+        # "SH" -> ["S", "H"]; "C." -> ["C"]
+        return list(token.replace(".", ""))
 
     def assinatura(self, nome):
 
@@ -76,31 +90,38 @@ class Curador:
 
         nome_limpo = self.remover_acentos(nome).upper()
 
+        invertido_por_virgula = "," in nome_limpo
+
         nome_limpo = nome_limpo.replace(",", " ")
 
-        tokens = nome_limpo.split()
+        tokens = [t for t in nome_limpo.split() if t.lower() not in PARTICULAS]
 
         if not tokens:
             return ""
 
-        sobrenome = tokens[-1]
-
+        # Descobre qual token e o sobrenome (nome por extenso)
+        if invertido_por_virgula:
+            sobrenome = tokens[0]
+            restantes = tokens[1:]
+        elif self._eh_inicial(tokens[-1]) and not self._eh_inicial(tokens[0]):
+            sobrenome = tokens[0]
+            restantes = tokens[1:]
+        else:
+            sobrenome = tokens[-1]
+            restantes = tokens[:-1]
+        
         iniciais = []
 
-        for token in tokens[:-1]:
-
-            if token.lower() in PARTICULAS:
-                continue
-
-            token = token.replace(".", "")
-
-            if len(token) == 1:
-                iniciais.append(token)
-
+        for token in restantes:
+            if self._eh_inicial(token):
+                iniciais.extend(self._expandir_iniciais(token))
             else:
                 iniciais.append(token[0])
 
-        return sobrenome + "|" + "|".join(iniciais)
+        # Usa apenas a PRIMEIRA inicial do primeiro nome como chave.
+        primeira_inicial = iniciais[0] if iniciais else ""
+
+        return sobrenome + "|" + primeira_inicial
 
 
     def pontuar_nome(self, nome):
