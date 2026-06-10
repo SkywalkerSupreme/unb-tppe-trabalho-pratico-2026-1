@@ -1,4 +1,4 @@
-# Relatório do Processo de TDD - Fase RED (Etapa 1)
+# Relatório do Processo de TDD - Fase RED e GREEN (Etapa 1)
 
 Este documento registra a conclusão da primeira fase do ciclo **Red-Green-Refactor** do Desenvolvimento Guiado por Testes (TDD) para o projeto de Curadoria de Dados Científicos.
 
@@ -17,3 +17,27 @@ A suíte atual conta com **144 execuções de testes automatizados**, o que gero
 Abaixo está o registro da execução do comando `python3 -m pytest` demonstrando o comportamento controlado do ecossistema de testes do grupo:
 
 <img width="1179" height="113" alt="Screenshot from 2026-06-08 16-07-49" src="https://github.com/user-attachments/assets/b4c57b69-9aca-436a-b02e-c6f2367b9f16" />
+
+## 4. Fase GREEN: Implementação da Lógica de Negócio
+
+Concluída a Fase RED, deu-se início à Fase GREEN, cujo objetivo é escrever o código mínimo necessário para que cada teste anteriormente vermelho passe a apresentar barra verde, sem alterar a suíte de testes já definida.
+
+As funções do `curador.py` que antes retornavam estruturas vazias (`[]` ou `{}`) foram implementadas com a lógica real de curadoria, organizada em métodos auxiliares reutilizáveis (`normalizar_nome`, `assinatura`, `pontuar_nome` e `melhor_nome`), de modo a evitar duplicação e atender simultaneamente aos cinco casos de deduplicação:
+
+* **Caso 1 (Tipografia):** normalização de apóstrofos, acentuação, caixa e espaços excedentes, elegendo a grafia mais completa do grupo.
+* **Caso 2 (Sobrenome + Iniciais):** unificação das versões abreviadas com a versão por extenso do nome.
+* **Caso 3 (Partículas):** reintegração das partículas de ligação (*de*, *da*, *do*) e tratamento dos pontos opcionais nas abreviações.
+* **Caso 4 (Iniciais agrupadas):** desmembramento de blocos de iniciais colados ao sobrenome (ex.: `SH Guaraldi`).
+* **Caso 5 (Deduplicação de IDs):** agrupamento dos registros de um mesmo autor por assinatura e mapeamento de todos para o menor ID.
+
+## 5. Cobertura e Análise da Fase GREEN
+
+Após a implementação, a suíte completa foi executada novamente sem qualquer alteração nos testes. O resultado obtido foi de **184 verificações (*assertions*) bem-sucedidas e 0 falhas** (barra verde total), confirmando que todas as unidades passaram a estar implementadas conforme o critério de correção do enunciado.
+
+Reforça-se que nenhuma unidade foi resolvida por meio de valores fixos (*hardcoded*): cada caso é tratado por algoritmos genéricos de normalização e pontuação de nomes, de forma que os mesmos métodos atendem tanto aos dados da tabela do enunciado quanto às variações complementares incluídas nos testes parametrizados.
+
+## 6. Evidência do Terminal (Fase GREEN Coletada)
+
+Abaixo está o registro da execução do comando `python3 -m pytest` demonstrando a suíte completa em estado verde:
+
+<img src="https://i.ibb.co/1fBv85NL/image.png" />
