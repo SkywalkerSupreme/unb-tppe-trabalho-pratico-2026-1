@@ -69,6 +69,20 @@ Para uma avaliação detalhada dos artefatos de engenharia criados pelo grupo, c
 
 ---
 
+
+## Base de Dados de Simulação
+
+O projeto utiliza uma base de dados sintética composta por **800 registros científicos**, desenvolvida para reproduzir cenários de duplicidade de autores, divergências de grafia, abreviações, omissão de partículas e redundância de identificadores.
+
+O conjunto de dados serve como insumo para a validação das unidades de curadoria e para a execução da suíte de testes automatizados.
+
+| Recurso | Descrição |
+|----------|------------|
+| **[dados_curadoria_800.json](./src/tests/data/dados_curadoria_800.json)** | Base de dados utilizada nos testes e experimentos de deduplicação. |
+| **[Documentação da Base de Dados](./docs/base_dados.md)** | Descrição da estrutura dos registros e dos cenários simulados. |
+
+---
+
 ## Resultados Obtidos
 
 - 184 testes automatizados aprovados;
