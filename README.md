@@ -53,6 +53,7 @@ Para uma avaliação detalhada dos artefatos de engenharia criados pelo grupo, c
 |------------|------------|
 | **[Simulação da Base de Dados (800 registros)](./docs/base_dados.md)** | Explicação da modelagem do arquivo JSON e links de rastreabilidade. |
 | **[Relatório do Ciclo TDD - Fases RED e GREEN](./docs/processo_tdd.md)** | Detalhamento técnico da cobertura dos 184 testes automatizados e evidências de execução do terminal. |
+| **[Arquitetura](./docs/arquitetura.md)** | Descrição da organização do sistema, responsabilidades dos componentes, fluxo de processamento e estratégia de deduplicação adotada. |
 
 ---
 
