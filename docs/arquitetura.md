@@ -6,17 +6,17 @@ Este documento descreve a arquitetura da solução desenvolvida para o Trabalho 
 
 O sistema tem como objetivo realizar a curadoria e a deduplicação de registros científicos provenientes de diferentes fontes de informação, identificando autores equivalentes, corrigindo inconsistências textuais e consolidando registros em um padrão-ouro.
 
-A implementação foi desenvolvida em Python utilizando a metodologia **Test-Driven Development (TDD)**, com validação por meio de testes automatizados implementados no framework **Pytest**.
+Além disso, a implementação foi desenvolvida em Python utilizando a metodologia **Test-Driven Development (TDD)**, com validação por meio de testes automatizados implementados no framework **Pytest**.
 
 ---
 
 ##  Visão Geral da Arquitetura
 
-A arquitetura adota uma organização simples e centralizada, adequada ao escopo do trabalho proposto.
+- A arquitetura adota uma organização simples e centralizada, adequada ao escopo do trabalho proposto.
 
-A classe principal `Curador` concentra as regras de negócio relacionadas à normalização de nomes, identificação de equivalências entre registros, seleção da representação canônica e consolidação de identificadores.
+- A classe principal `Curador` concentra as regras de negócio relacionadas à normalização de nomes, identificação de equivalências entre registros, seleção da representação canônica e consolidação de identificadores.
 
-A solução utiliza métodos auxiliares reutilizáveis para evitar duplicação de lógica e promover maior coesão entre os diferentes casos de deduplicação.
+- A solução utiliza métodos auxiliares reutilizáveis para evitar duplicação de lógica e promover maior coesão entre os diferentes casos de deduplicação.
 
 O processamento ocorre em quatro etapas principais:
 
