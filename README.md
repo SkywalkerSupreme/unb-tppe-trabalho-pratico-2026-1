@@ -101,13 +101,62 @@ python3 -m pytest
 ### 4. Execução por Categorias (Marcadores do enunciado)
 Caso queira testar categorias ou casos isolados utilizando os marcadores registrados no pytest.ini, utilize a flag -m:
 
+#### Caso 1 — Diferenças Tipográficas
+
 ```bash
-# Executar apenas o Caso 1 (Tipografia)
 python3 -m pytest -m caso1
+```
 
-# Executar apenas a suíte de Testes de Exceção
+#### Caso 2 — Sobrenome + Iniciais
+
+```bash
+python3 -m pytest -m caso2
+```
+
+#### Caso 3 — Partículas Opcionais
+
+```bash
+python3 -m pytest -m caso3
+```
+
+#### Caso 4 — Iniciais Agrupadas
+
+```bash
+python3 -m pytest -m caso4
+```
+
+#### Caso 5 — Deduplicação de IDs
+
+```bash
+python3 -m pytest -m caso5
+```
+
+#### Testes de Exceção
+
+```bash
 python3 -m pytest -m excecoes
+```
 
+#### Categorias Específicas
+
+```bash
+# Testes tipográficos
+python3 -m pytest -m tipografia
+
+# Testes de iniciais
+python3 -m pytest -m iniciais
+
+# Testes de partículas
+python3 -m pytest -m particulas
+
+# Testes de iniciais agrupadas
+python3 -m pytest -m agrupados
+
+# Testes de deduplicação
+python3 -m pytest -m deduplicacao
+
+# Testes de tratamento de erros
+python3 -m pytest -m erros
 ```
 
 ## Evidência de Execução
