@@ -38,7 +38,7 @@ O desenvolvimento do projeto está estruturado com base na metodologia **TDD (Te
 
 Para uma avaliação detalhada dos artefatos de engenharia criados pelo grupo, consulte nossa pasta de documentações dedicada:
 * **[Simulação da Base de Dados (800 registros)](./docs/base_dados.md):** Explicação da modelagem do arquivo JSON e links de rastreabilidade.
-* **[Relatório do Ciclo TDD - Fase RED](./docs/processo_tdd.md):** Detalhamento técnico da cobertura dos 144 testes automatizados e evidências de execução do terminal.
+* **[Relatório do Ciclo TDD - Fase RED](./docs/processo_tdd.md):** Detalhamento técnico da cobertura dos 184 testes automatizados e evidências de execução do terminal.
 
 ---
 
