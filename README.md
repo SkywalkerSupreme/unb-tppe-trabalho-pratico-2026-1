@@ -42,6 +42,13 @@ Desenvolver um sistema de curadoria e deduplicação de dados científicos capaz
 | Versão do Framework | 7.4.4  |
 | Paradigma de Desenvolvimento | Test-Driven Development (TDD) |
 
+| Recurso de Teste | Utilização |
+|--------|--------|
+| Testes Parametrizados | pytest.mark.parametrize |
+| Categorias de Teste | pytest markers |
+| Suítes de Teste | Organização por arquivos e marcadores |
+| Testes de Exceção | pytest.raises |
+
 
 ---
 
