@@ -181,3 +181,59 @@ Execução da suíte completa de testes:
 
 <img width="1203" height="244" alt="image" src="https://github.com/user-attachments/assets/1388dba6-8b80-4756-8fba-60c76ae2ffa7" />
 
+## Execução dos testes por seção
+
+As imagens a seguir apresentam a execução individual dos testes associados a cada caso. Essa evidência complementa a execução da suíte completa e permite verificar separadamente o comportamento e a aprovação de cada unidade implementada.
+
+### Caso 1 – Diferenças Tipográficas
+
+Execução da suíte referente ao tratamento de diferenças tipográficas, acentuação, caracteres especiais e normalização textual.
+
+<img width="1203" height="244" alt="Screenshot from 2026-06-10 10-25-27" src="https://github.com/user-attachments/assets/31272b61-3864-467d-97a4-660380ffa680" />
+
+
+---
+
+### Caso 2 – Sobrenome Acompanhado de Iniciais
+
+Execução da suíte referente à identificação e unificação de autores representados por sobrenome acompanhado de iniciais.
+
+
+<img width="1203" height="177" alt="Screenshot from 2026-06-10 10-28-37" src="https://github.com/user-attachments/assets/114b4590-7b96-4335-8cc6-64dee9f3fa29" />
+
+---
+
+### Caso 3 – Partículas e Pontuação Opcional
+
+Execução da suíte referente ao tratamento de partículas de ligação e variações de pontuação em nomes de autores.
+
+<img width="1203" height="177" alt="Screenshot from 2026-06-10 10-29-16" src="https://github.com/user-attachments/assets/fe2255a6-a12f-4074-b447-f4ed734309ea" />
+
+
+---
+
+### Caso 4 – Iniciais Agrupadas e Sobrenome
+
+Execução da suíte referente à expansão de iniciais agrupadas e à seleção da representação mais completa do autor.
+
+<img width="1203" height="177" alt="image" src="https://github.com/user-attachments/assets/f8df0c0e-beca-4d48-b0a7-109d9f0bef72" />
+
+
+---
+
+### Caso 5 – Deduplicação e Consolidação de IDs
+
+Execução da suíte referente ao agrupamento de registros equivalentes e à definição do identificador padrão-ouro.
+
+<img width="1203" height="177" alt="Screenshot from 2026-06-10 10-30-06" src="https://github.com/user-attachments/assets/d60308c8-1a30-4a84-add5-9359962ea184" />
+
+
+---
+
+### Suíte de Exceções
+
+Execução da suíte responsável pela validação estrutural dos dados e pelo tratamento das exceções definidas para o projeto.
+
+
+<img width="1203" height="177" alt="Screenshot from 2026-06-10 10-31-13" src="https://github.com/user-attachments/assets/c27da53d-5ec2-47fb-a108-89ed86d4ee80" />
+
