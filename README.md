@@ -244,3 +244,41 @@ Execução da suíte responsável pela validação estrutural dos dados e pelo t
 
 <img width="1203" height="177" alt="Screenshot from 2026-06-10 10-31-13" src="https://github.com/user-attachments/assets/c27da53d-5ec2-47fb-a108-89ed86d4ee80" />
 
+
+
+---
+
+---
+
+## Etapa 2 — Engenharia de Refatoração
+
+Na segunda etapa do projeto, o foco voltou-se para a melhoria contínua do design arquitetural, da coesão e da legibilidade do código-fonte. O grupo executou manualmente três operações formais de refatoração na estrutura do sistema. Essas alterações reduziram o acoplamento e eliminaram a complexidade sem qualquer modificação no comportamento externo do software.
+
+Para uma avaliação técnica aprofundada de cada modificação, consulte os relatórios dedicados na pasta de documentação:
+
+### 1. Extrair Classe (Extract Class)
+* **Alvo:** Classe `Curador` (`src/curador.py`)
+* **Solução:** Toda a lógica de baixo nível para o tratamento de strings (limpeza de acentos, espaçamentos e variantes de apóstrofos) foi isolada na nova classe `ProcessadorTextoCientifico`. O componente principal agora interage com essa infraestrutura por meio de composição e delegação pura de comportamento.
+* **Documentação:** **[Relatório de Extração de Classe](./docs/refatoracao_extrair_classe.md)**
+
+### 2. Substituir Método por Objeto-Método (Replace Method with Method Object)
+* **Alvo:** Método `Curador::pontuar_nome()`
+* **Solução:** A rotina procedural de acúmulo de pontos foi convertida na classe autônoma `PontuadorNome`. Os cálculos e pesos ganharam um ciclo de vida próprio e atributos de instância dedicados, o que protegeu a classe mãe contra o acúmulo de variáveis temporárias.
+* **Documentação:** **[Relatório de Objeto-Método](./docs/refatoracao_objeto_metodo.md)**
+
+### 3. Extrair Método (Extract Method)
+* **Alvo:** Método `Curador::assinatura()`
+* **Solução:** O bloco condicional complexo encarregado de identificar a posição do sobrenome do autor foi movido para o método privado `_extrair_sobrenome()`. Essa extração tornou o fluxo do gerador de assinaturas totalmente linear, previsível e declarativo.
+* **Documentação:** **[Relatório de Extração de Método](./docs/refatoracao_extrair_metodo.md)**
+
+---
+
+### Impacto e Validação Arquitetural
+
+A suíte original de testes automatizados do projeto funcionou como uma rede de segurança durante todo o processo. Nenhuma assinatura de contrato público sofreu alteração, o que garantiu a estabilidade total do ecossistema de software.
+
+* **Testes Executados:** 184 asserções via Pytest.
+* **Taxa de Sucesso:** 100% de aprovação (barra verde preservada).
+* **Manutenibilidade:** Código em conformidade com o Princípio de Responsabilidade Única (SRP).
+
+O balanço completo da evolução do design e da qualidade do código consta no **[Relatório Final de Refatoração](./docs/relatorio_final_refatoracao.md)**.
