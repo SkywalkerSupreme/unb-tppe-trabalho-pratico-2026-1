@@ -39,3 +39,4 @@ def pontuar_nome(self, nome):
 
 A integridade do comportamento do sistema foi avaliada por meio da execução da suíte de testes automatizados via Pytest:
 
+<img width="1208" height="272" alt="image" src="https://github.com/user-attachments/assets/8e965f8c-38ce-4b06-b953-4211efee318d" />
