@@ -1,269 +1,289 @@
 # src/curador.py
-
 import re
-import unicodedata
-
+from src.processador import ProcessadorTextoCientifico, PARTICULAS
 
 class FormatoInvalidoError(Exception):
     pass
-
 
 class IdInvalidoError(Exception):
     pass
 
 
-PARTICULAS = {
-    "de", "da", "do", "das", "dos"
-}
+class PontuadorNome:
+    """Objeto-Método para o cálculo do score de qualidade de um nome."""
+    
+    def __init__(self, curador_instancia, nome_original):
+        self._curador = curador_instancia
+        self.nome = self._curador.normalizar_nome(nome_original)
+        self.score = 0
+
+    def computar(self):
+        if not self.nome:
+            return 0
+
+        self.score += len(self.nome)
+        self.score += sum(5 for c in self.nome if c in "áàâãéêíóôõúçÁÀÂÃÉÊÍÓÔÕÚÇ")
+        
+        self.score += self.nome.count(" de ") * 5
+        self.score += self.nome.count(" da ") * 5
+        self.score += self.nome.count(" do ") * 5
+        self.score += self.nome.count(" das ") * 5
+        self.score += self.nome.count(" dos ") * 5
+
+        self.score -= self.nome.count(".") * 10
+        return self.score
 
 
 class Curador:
+    """Classe principal de curadoria e deduplicação de autores."""
 
-
-    # FUNÇÕES AUXILIARES
-
+    def __init__(self):
+        self._processador_texto = ProcessadorTextoCientifico()
 
     def remover_acentos(self, texto):
-        return "".join(
-            c for c in unicodedata.normalize("NFD", texto)
-            if unicodedata.category(c) != "Mn"
-        )
+        return self._processador_texto.remover_acentos(texto)
 
     def limpar_apostrofos(self, texto):
-        return (
-            texto.replace("\\`", "'")
-                 .replace("`", "'")
-                 .replace("´", "'")
-                 .replace("’", "'")
-                 .replace("‘", "'")
-        )
+        return self._processador_texto.limpar_apostrofos(texto)
 
     def limpar_espacos(self, texto):
-        return " ".join(texto.strip().split())
+        return self._processador_texto.limpar_espacos(texto)
 
     def normalizar_caixa(self, texto):
-
-        palavras = []
-
-        for p in texto.split():
-
-            if p.lower() in PARTICULAS:
-                palavras.append(p.lower())
-            elif "'" in p:
-                prefix, _, suffix = p.partition("'")
-                # O' and D' prefixes are single-char: capitalize the independent word after.
-                # Multi-char prefixes like Sant' are compound: lowercase the ending.
-                suffix_norm = suffix.capitalize() if len(prefix) == 1 else suffix.lower()
-                palavras.append(prefix.capitalize() + "'" + suffix_norm)
-            else:
-                palavras.append(p.capitalize())
-
-        return " ".join(palavras)
+        return self._processador_texto.normalizar_caixa(texto)
 
     def normalizar_nome(self, nome):
-
-        nome = self.limpar_apostrofos(nome)
-        nome = self.limpar_espacos(nome)
-        nome = self.normalizar_caixa(nome)
-
-        return nome
+        return self._processador_texto.normalizar_nome(nome)
 
     def _eh_inicial(self, token):
-        miolo = token.replace(".", "")
-
-        if not miolo:
-            return False
-
-        if len(miolo) == 1:
-            return True
-
-        # Iniciais aglutinadas: tudo maiusculo e curto
-        return miolo.isupper() and len(miolo) <= 3
+        return self._processador_texto.eh_inicial(token)
 
     def _expandir_iniciais(self, token):
-        # "SH" -> ["S", "H"]; "C." -> ["C"]
-        return list(token.replace(".", ""))
+        return self._processador_texto.expandir_iniciais(token)
+
+    def _extrair_sobrenome(self, tokens, invertido_por_virgula):
+        """Método Extraído: Isola o sobrenome principal conforme a estrutura dos tokens."""
+        if invertido_por_virgula:
+            return tokens[0], tokens[1:]
+        
+        if self._eh_inicial(tokens[-1]) and not self._eh_inicial(tokens[0]):
+            return tokens[0], tokens[1:]
+            
+        return tokens[-1], tokens[:-1]
+
+    def signature(self, nome):
+        return self.assinatura(nome)
 
     def assinatura(self, nome):
-
         nome = self.normalizar_nome(nome)
-
         nome_limpo = self.remover_acentos(nome).upper()
-
         invertido_por_virgula = "," in nome_limpo
-
         nome_limpo = nome_limpo.replace(",", " ")
 
         tokens = [t for t in nome_limpo.split() if t.lower() not in PARTICULAS]
-
         if not tokens:
             return ""
 
-        # Descobre qual token e o sobrenome (nome por extenso)
-        if invertido_por_virgula:
-            sobrenome = tokens[0]
-            restantes = tokens[1:]
-        elif self._eh_inicial(tokens[-1]) and not self._eh_inicial(tokens[0]):
-            sobrenome = tokens[0]
-            restantes = tokens[1:]
-        else:
-            sobrenome = tokens[-1]
-            restantes = tokens[:-1]
+        sobrenome, restantes = self._extrair_sobrenome(tokens, invertido_por_virgula)
         
         iniciais = []
-
         for token in restantes:
             if self._eh_inicial(token):
                 iniciais.extend(self._expandir_iniciais(token))
             else:
                 iniciais.append(token[0])
 
-        # Usa apenas a PRIMEIRA inicial do primeiro nome como chave.
         primeira_inicial = iniciais[0] if iniciais else ""
-
-        return sobrenome + "|" + primeira_inicial
-
+        return f"{sobrenome}|{primeira_inicial}"
 
     def pontuar_nome(self, nome):
-
-        score = 0
-
-        nome = self.normalizar_nome(nome)
-
-        score += len(nome)
-
-        score += sum(
-            5
-            for c in nome
-            if c in "áàâãéêíóôõúçÁÀÂÃÉÊÍÓÔÕÚÇ"
-        )
-
-        score += nome.count(" de ") * 5
-
-        # Each dot signals an abbreviation, making the name less complete.
-        score -= nome.count(".") * 10
-
-        return score
+        """Substituir Método por Objeto-Método: Transfere execução para PontuadorNome."""
+        objeto_metodo = PontuadorNome(self, nome)
+        return objeto_metodo.computar()
 
     def melhor_nome(self, nomes):
-
-        return max(nomes, key=self.pontuar_nome)
-
-
-    # CASO 1
+        if not nomes:
+            return ""
+        
+        candidatos = []
+        for n in nomes:
+            if n is not None and str(n).strip() != "":
+                candidatos.append(n)
+                
+        if not candidatos:
+            return ""
+            
+        return max(candidatos, key=self.pontuar_nome)
 
     def curar_tipografia(self, lista):
-
-        normalizados = [self.normalizar_nome(x) for x in lista]
-
+        if lista is None:
+            return []
+            
+        valores_validos = []
+        for item in lista:
+            if item is not None:
+                valores_validos.append(item)
+                
+        if not valores_validos:
+            return []
+            
+        normalizados = []
+        for x in valores_validos:
+            nome_tratado = self.normalizar_nome(x)
+            normalizados.append(nome_tratado)
+            
         melhor = self.melhor_nome(normalizados)
-
+        
         resultado = []
-
         for _ in lista:
             resultado.append(melhor)
-
+            
         return resultado
 
-    # CASO 2
-
     def curar_iniciais(self, lista):
-
-        melhor = self.melhor_nome(lista)
-
-        return [melhor] * len(lista)
-
-    # CASO 3
+        if lista is None:
+            return []
+            
+        valores_validos = []
+        for item in lista:
+            if item is not None:
+                valores_validos.append(item)
+                
+        if not valores_validos:
+            return []
+            
+        melhor = self.melhor_nome(valores_validos)
+        
+        resultado = []
+        for _ in lista:
+            resultado.append(melhor)
+            
+        return resultado
 
     def curar_particulas(self, lista):
-
-        normalizados = [self.normalizar_nome(x) for x in lista]
-
+        if lista is None:
+            return []
+            
+        valores_validos = []
+        for item in lista:
+            if item is not None:
+                valores_validos.append(item)
+                
+        if not valores_validos:
+            return []
+            
+        normalizados = []
+        for x in valores_validos:
+            nome_tratado = self.normalizar_nome(x)
+            normalizados.append(nome_tratado)
+            
         melhor = self.melhor_nome(normalizados)
-
-        return [melhor] * len(lista)
-
-
-    # CASO 4
+        
+        resultado = []
+        for _ in lista:
+            resultado.append(melhor)
+            
+        return resultado
 
     def curar_agrupados(self, lista):
-
-        melhor = self.melhor_nome(lista)
-
-        return [melhor] * len(lista)
-
-
-    # CASO 5
+        if lista is None:
+            return []
+            
+        valores_validos = []
+        for item in lista:
+            if item is not None:
+                valores_validos.append(item)
+                
+        if not valores_validos:
+            return []
+            
+        melhor = self.melhor_nome(valores_validos)
+        
+        resultado = []
+        for _ in lista:
+            resultado.append(melhor)
+            
+        return resultado
 
     def consolidar_ids(self, autores):
-
+        if autores is None:
+            return {}
+            
+        if len(autores) == 0:
+            return {}
+            
         grupos = {}
-
-        for id_, nome in autores.items():
-
-            assinatura = self.assinatura(nome)
-
-            grupos.setdefault(assinatura, []).append(
-                (int(id_), nome)
-            )
+        for id_bruto, nome_bruto in autores.items():
+            if id_bruto is not None and nome_bruto is not None:
+                chave_assinatura = self.assinatura(nome_bruto)
+                id_inteiro = int(id_bruto)
+                grupos.setdefault(chave_assinatura, []).append((id_inteiro, nome_bruto))
 
         resultado = {}
-
-        for grupo in grupos.values():
-
-            melhor_nome = self.melhor_nome(
-                [nome for _, nome in grupo]
-            )
-
-            for id_, _ in sorted(grupo):
-                resultado[str(id_)] = melhor_nome
-
-        return dict(sorted(resultado.items(), key=lambda x: int(x[0])))
-
-
-    # ID OURO
-
+        for chave_grupo in grupos:
+            colecao_grupo = grupos[chave_grupo]
+            lista_nomes = []
+            for par_autor in colecao_grupo:
+                lista_nomes.append(par_autor[1])
+                
+            melhor_nome = self.melhor_nome(lista_nomes)
+            
+            for par_autor in sorted(colecao_grupo):
+                id_atual = par_autor[0]
+                resultado[str(id_atual)] = melhor_nome
+                
+        lista_pares_ordenados = sorted(resultado.items(), key=lambda elemento: int(elemento[0]))
+        return dict(lista_pares_ordenados)
 
     def obter_id_ouro(self, autores):
-
+        if autores is None:
+            return None
+            
         ids = []
-
         for autor in autores:
-
-            id_ = autor["id"]
-
-            if not isinstance(id_, int):
+            if isinstance(autor, dict):
+                id_registro = autor.get("id")
+            else:
+                id_registro = None
+                
+            if id_registro is None:
                 raise IdInvalidoError()
-
-            if id_ <= 0:
+                
+            if not isinstance(id_registro, int):
                 raise IdInvalidoError()
-
-            ids.append(id_)
-
+                
+            if id_registro <= 0:
+                raise IdInvalidoError()
+                
+            ids.append(id_registro)
+            
+        if len(ids) == 0:
+            return None
+            
         return min(ids)
 
-    # VALIDAÇÃO
-
     def processar_base_dados(self, dados):
-
-        if not dados:
+        if dados is None:
             raise FormatoInvalidoError()
-
+            
+        if isinstance(dados, list) and len(dados) == 0:
+            raise FormatoInvalidoError()
+            
         for registro in dados:
-
             if not isinstance(registro, dict):
                 raise FormatoInvalidoError()
-
+                
             if "id" not in registro:
                 raise FormatoInvalidoError()
-
+                
             if "nome" not in registro:
                 raise FormatoInvalidoError()
-
-            if not isinstance(registro["id"], int):
+                
+            id_atual = registro["id"]
+            if not isinstance(id_atual, int):
                 raise FormatoInvalidoError()
-
-            if registro["id"] <= 0:
+                
+            if id_atual <= 0:
                 raise IdInvalidoError()
-
+                
         return True

@@ -17,10 +17,8 @@ class RegraNegocioVioladaError(CuradorError):
     """Lançada quando os dados contêm valores impossíveis (idade negativa, email sem @)."""
     pass
 
-
-# ==============================================================================
 # CLASSES DO SISTEMA DE CURADORIA
-# ==============================================================================
+
 class CuradorDados:
     """
     Classe Principal Orquestradora (Orientação a Objetos).
