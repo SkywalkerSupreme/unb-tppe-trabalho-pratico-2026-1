@@ -259,17 +259,17 @@ Para uma avaliação técnica aprofundada de cada modificação, consulte os rel
 ### 1. Extrair Classe (Extract Class)
 * **Alvo:** Classe `Curador` (`src/curador.py`)
 * **Solução:** Toda a lógica de baixo nível para o tratamento de strings (limpeza de acentos, espaçamentos e variantes de apóstrofos) foi isolada na nova classe `ProcessadorTextoCientifico`. O componente principal agora interage com essa infraestrutura por meio de composição e delegação pura de comportamento.
-* **Documentação:** **[Relatório de Extração de Classe](./docs/refatoracao_extrair_classe.md)**
+* **Documentação:** **[Relatório de Extração de Classe](./docs/Refatoracao/refatoracao_extrair_classe.md)**
 
 ### 2. Substituir Método por Objeto-Método (Replace Method with Method Object)
 * **Alvo:** Método `Curador::pontuar_nome()`
 * **Solução:** A rotina procedural de acúmulo de pontos foi convertida na classe autônoma `PontuadorNome`. Os cálculos e pesos ganharam um ciclo de vida próprio e atributos de instância dedicados, o que protegeu a classe mãe contra o acúmulo de variáveis temporárias.
-* **Documentação:** **[Relatório de Objeto-Método](./docs/refatoracao_objeto_metodo.md)**
+* **Documentação:** **[Relatório de Objeto-Método](./docs/Refatoracao/refatoracao_objeto_metodo.md)**
 
 ### 3. Extrair Método (Extract Method)
 * **Alvo:** Método `Curador::assinatura()`
 * **Solução:** O bloco condicional complexo encarregado de identificar a posição do sobrenome do autor foi movido para o método privado `_extrair_sobrenome()`. Essa extração tornou o fluxo do gerador de assinaturas totalmente linear, previsível e declarativo.
-* **Documentação:** **[Relatório de Extração de Método](./docs/refatoracao_extrair_metodo.md)**
+* **Documentação:** **[Relatório de Extração de Método](./docs/Refatoracao/refatoracao_extrair_metodo.md)**
 
 ---
 
@@ -281,4 +281,4 @@ A suíte original de testes automatizados do projeto funcionou como uma rede de 
 * **Taxa de Sucesso:** 100% de aprovação (barra verde preservada).
 * **Manutenibilidade:** Código em conformidade com o Princípio de Responsabilidade Única (SRP).
 
-O balanço completo da evolução do design e da qualidade do código consta no **[Relatório Final de Refatoração](./docs/relatorio_final_refatoracao.md)**.
+O balanço completo da evolução do design e da qualidade do código consta no **[Relatório Final de Refatoração](./docs/Refatoracao/relatorio_final_refatoracao.md)**.
