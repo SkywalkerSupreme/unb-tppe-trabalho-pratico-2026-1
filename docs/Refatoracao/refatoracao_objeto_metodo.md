@@ -19,19 +19,22 @@ A transformação desse método em um objeto separado permite isolar as regras d
 
 A refatoração seguiu os passos formais definidos por Martin Fowler:
 
-1. **Criação da Classe Especializada:** Foi desenvolvida a classe `PontuadorNome` contendo um construtor que recebe a referência da instância chamadora (`Curador`) e o argumento original (`nome`).
+1. **Criação da Classe Especializada:** Foi desenvolvida a classe `PontuadorNome` contendo um construtor que recebe o nome já normalizado para pontuação.
 2. **Transferência de Estado:** A variável local antiga `score` foi convertida em um atributo de instância da nova classe.
-3. **Delegação de Fluxo:** O corpo original do método foi movido para a função `computar()`. O método `Curador.pontuar_nome()` original passou a atuar como uma mera casca de delegação:
+3. **Delegação de Fluxo:** O corpo original do método foi movido para a função `computar()`. O método `Curador.pontuar_nome()` original passou a normalizar a entrada e delegar o cálculo para o objeto-método:
 
 ```python
 def pontuar_nome(self, nome):
-    objeto_metodo = PontuadorNome(self, nome)
+    nome_normalizado = self.normalizar_nome(nome)
+    objeto_metodo = PontuadorNome(nome_normalizado)
     return objeto_metodo.computar()
 ```
 
 4. Benefícios Arquiteturais Observados
 
     - Isolamento de Estado: O cálculo de score ganhou um ciclo de vida próprio e isolado, evitando o acúmulo de variáveis temporárias na classe principal.
+
+    - Menor Acoplamento: O objeto-método não depende mais de uma instância completa de `Curador`; ele recebe apenas o dado necessário para executar o cálculo.
 
     - Facilidade de Expansão: Caso a equipe decida alterar os pesos ou introduzir novas regras de validação (como checagem de sufixos ou títulos acadêmicos), a alteração ficará restrita à classe PontuadorNome, sem poluir o fluxo de deduplicação dos casos de uso.
 

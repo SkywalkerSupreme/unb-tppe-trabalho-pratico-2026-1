@@ -12,9 +12,8 @@ class IdInvalidoError(Exception):
 class PontuadorNome:
     """Objeto-Método para o cálculo do score de qualidade de um nome."""
     
-    def __init__(self, curador_instancia, nome_original):
-        self._curador = curador_instancia
-        self.nome = self._curador.normalizar_nome(nome_original)
+    def __init__(self, nome_normalizado):
+        self.nome = nome_normalizado
         self.score = 0
 
     def computar(self):
@@ -98,7 +97,8 @@ class Curador:
 
     def pontuar_nome(self, nome):
         """Substituir Método por Objeto-Método: Transfere execução para PontuadorNome."""
-        objeto_metodo = PontuadorNome(self, nome)
+        nome_normalizado = self.normalizar_nome(nome)
+        objeto_metodo = PontuadorNome(nome_normalizado)
         return objeto_metodo.computar()
 
     def melhor_nome(self, nomes):
