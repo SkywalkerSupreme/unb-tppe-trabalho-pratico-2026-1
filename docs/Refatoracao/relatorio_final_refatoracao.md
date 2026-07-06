@@ -37,3 +37,6 @@ O grupo realizou as três alterações obrigatórias previstas para o Grupo 16, 
 Todas as operações ocorreram sem o uso de ferramentas automatizadas de refatoração, o que exigiu análise estrita de escopo e tipagem. O resultado gerou um código limpo, de alta manutenibilidade e extensível.
 
 Como principal critério de validação, a suíte de testes do projeto foi mantida intacta e executada após cada entrega:
+
+<img width="1208" height="272" alt="image" src="https://github.com/user-attachments/assets/8ebb30e4-aa6d-4e09-a142-61bc2effb112" />
+
