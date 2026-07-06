@@ -70,3 +70,12 @@ class TestCaso1Tipografia:
     ])
     def test_limpeza_espacos_sobressalentes(self, lista_in, lista_out):
         assert self.curador.curar_tipografia(lista_in) == lista_out
+
+    @pytest.mark.parametrize("lista_in", [
+        None,
+        [],
+        [None],
+        [None, None]
+    ])
+    def test_entradas_sem_nomes_validos(self, lista_in):
+        assert self.curador.curar_tipografia(lista_in) == []

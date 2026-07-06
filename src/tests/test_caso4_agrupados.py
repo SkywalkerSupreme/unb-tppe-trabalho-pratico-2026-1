@@ -53,3 +53,12 @@ class TestCaso4Agrupados:
     ])
     def test_iniciais_agrupadas_caixa_baixa(self, lista_in, lista_out):
         assert self.curador.curar_agrupados(lista_in) == lista_out
+
+    @pytest.mark.parametrize("lista_in", [
+        None,
+        [],
+        [None],
+        [None, None]
+    ])
+    def test_entradas_sem_nomes_validos(self, lista_in):
+        assert self.curador.curar_agrupados(lista_in) == []

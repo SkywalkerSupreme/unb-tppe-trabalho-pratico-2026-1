@@ -55,3 +55,12 @@ class TestCaso2Iniciais:
     ])
     def test_sobrenome_com_virgula_e_iniciais(self, lista_in, lista_out):
         assert self.curador.curar_iniciais(lista_in) == lista_out
+
+    @pytest.mark.parametrize("lista_in", [
+        None,
+        [],
+        [None],
+        [None, None]
+    ])
+    def test_entradas_sem_nomes_validos(self, lista_in):
+        assert self.curador.curar_iniciais(lista_in) == []

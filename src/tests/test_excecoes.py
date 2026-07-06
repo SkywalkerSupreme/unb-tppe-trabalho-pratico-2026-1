@@ -30,3 +30,6 @@ class TestExcecoesCurador:
     def test_excecao_id_negativo_ou_zero(self, registro_id_invalido):
         with pytest.raises(IdInvalidoError):
             self.curador.processar_base_dados(registro_id_invalido)
+
+    def test_base_valida_e_aceita(self, dados_reais):
+        assert self.curador.processar_base_dados(dados_reais) is True

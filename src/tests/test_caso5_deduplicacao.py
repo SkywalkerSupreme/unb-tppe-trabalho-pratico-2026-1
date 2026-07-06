@@ -88,3 +88,31 @@ class TestCaso5Deduplicacao:
     ])
     def test_resolucao_id_menor_objeto(self, lista_autores, id_esperado):
         assert self.curador.obter_id_ouro(lista_autores) == id_esperado
+
+    @pytest.mark.parametrize("dicionario_in, dicionario_out", [
+        (None, {}),
+        ({}, {}),
+        ({"101": None}, {})
+    ])
+    def test_consolidacao_sem_autores_validos(self, dicionario_in, dicionario_out):
+        assert self.curador.consolidar_ids(dicionario_in) == dicionario_out
+
+    def test_nao_unifica_autores_com_assinaturas_diferentes(self):
+        autores = {
+            "101": "Ana de Mattos Seabra",
+            "202": "Bruno de Mattos Seabra",
+            "303": "Cassius de Souza"
+        }
+
+        assert self.curador.consolidar_ids(autores) == {
+            "101": "Ana de Mattos Seabra",
+            "202": "Bruno de Mattos Seabra",
+            "303": "Cassius de Souza"
+        }
+
+    @pytest.mark.parametrize("lista_autores", [
+        None,
+        []
+    ])
+    def test_id_ouro_sem_autores(self, lista_autores):
+        assert self.curador.obter_id_ouro(lista_autores) is None

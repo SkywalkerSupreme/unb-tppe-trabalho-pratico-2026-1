@@ -53,3 +53,12 @@ class TestCaso3Particulas:
     ])
     def test_normalizacao_caso_particulas(self, lista_in, lista_out):
         assert self.curador.curar_particulas(lista_in) == lista_out
+
+    @pytest.mark.parametrize("lista_in", [
+        None,
+        [],
+        [None],
+        [None, None]
+    ])
+    def test_entradas_sem_nomes_validos(self, lista_in):
+        assert self.curador.curar_particulas(lista_in) == []
