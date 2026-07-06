@@ -61,3 +61,7 @@ As funções core de inteligência de deduplicação (assinatura e pontuar_nome)
 ## 5. Verificação de Corretude e Impacto
 
 Para validar o critério de que os testes deveriam continuar efetivos e passando sem efeitos colaterais, a suíte automatizada via Pytest foi executada imediatamente após as modificações estruturais da arquitetura:
+
+<img width="1208" height="272" alt="image" src="https://github.com/user-attachments/assets/8739f7ed-8c03-45e0-92ef-0e967b9de2e8" />
+
+
