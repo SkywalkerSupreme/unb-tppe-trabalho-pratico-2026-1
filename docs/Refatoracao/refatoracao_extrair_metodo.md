@@ -42,8 +42,5 @@ sobrenome, restantes = self._extrair_sobrenome(tokens, invertido_por_virgula)
 
 A estabilidade do sistema foi avaliada por meio da execução da suíte de testes automatizados via Pytest:
 
-```Bash
+<img width="1208" height="272" alt="image" src="https://github.com/user-attachments/assets/bda68ff4-aba2-47b7-8076-f77e28f2fe7b" />
 
-
-================ 184 passed in 0.18s ================
-```
