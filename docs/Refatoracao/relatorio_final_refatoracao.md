@@ -11,7 +11,7 @@ O grupo realizou as três alterações obrigatórias previstas para o Grupo 16, 
 
 | Operação | Alvo Original | Destino / Estrutura Gerada |
 | :--- | :--- | :--- |
-| **Extrair Classe** | Classe `Curador` | Criação de `ProcessadorTextoCientifico` em `src/processador.py` |
+| **Extrair Classe** | Classe `Curador` | Criação de `ProcessadorTextoCientifico` em `src/processador.py`, Criação de `ValidadorRegistros` em `src/validador.py` |
 | **Substituir Método por Objeto-Método** | `Curador::pontuar_nome()` | Criação da classe especialista `PontuadorNome` |
 | **Extrair Método** | `Curador::assinatura()` | Criação dos métodos privados `_tokenizar_nome()`, `_extrair_sobrenome()` e `_obter_primeira_inicial()` |
 
@@ -20,8 +20,8 @@ O grupo realizou as três alterações obrigatórias previstas para o Grupo 16, 
 ## 3. Detalhamento e Justificativa Técnica
 
 ### A. Extrair Classe
-* **Problema Original:** A classe `Curador` acumulava tarefas de infraestrutura textual de baixo nível (como limpeza de acentos, apóstrofos e espaços) e regras estratégicas de negócio.
-* **Solução:** Toda a manipulação de strings foi movida para a nova classe `ProcessadorTextoCientifico`. O `Curador` agora interage com essa infraestrutura por meio de composição e delegação pura de comportamento.
+* **Problema Original:** A classe `Curador` acumulava tarefas de infraestrutura textual de baixo nível (como limpeza de acentos, apóstrofos e espaços), toda a validação de contrato e integridade dos registros de entrada e também regras estratégicas de negócio.
+* **Solução:** Toda a manipulação de strings foi movida para a nova classe `ProcessadorTextoCientifico`. A validação foi movida para a classe autônoma `ValidadorRegistros`. O `Curador` agora interage com essa infraestrutura por meio de composição e delegação pura de comportamento.
 
 ### B. Substituir Método por Objeto-Método
 * **Problema Original:** O método `pontuar_nome()` continha variáveis temporárias e um acúmulo procedural de pontos em um estado local.
