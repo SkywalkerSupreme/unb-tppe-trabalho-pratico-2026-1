@@ -256,29 +256,27 @@ Na segunda etapa do projeto, o foco voltou-se para a melhoria contínua do desig
 
 Para uma avaliação técnica aprofundada de cada modificação, consulte os relatórios dedicados na pasta de documentação:
 
+
 ### 1. Extrair Classe (Extract Class)
 * **Alvo:** Classe `Curador` (`src/curador.py`)
-* **Solução:** Toda a lógica de baixo nível para o tratamento de strings (limpeza de acentos, espaçamentos e variantes de apóstrofos) foi isolada na nova classe `ProcessadorTextoCientifico`. O componente principal agora interage com essa infraestrutura por meio de composição e delegação pura de comportamento.
+* **Solução:** Toda a lógica de baixo nível para o tratamento de strings (limpeza de acentos, espaçamentos e variantes de apóstrofos) foi isolada na nova classe `ProcessadorTextoCientifico`, e a validação de contrato dos registros de entrada foi isolada na nova classe `ValidadorRegistros`. O componente principal agora interage com essa infraestrutura por meio de composição e delegação pura de comportamento.
 * **Documentação:** **[Relatório de Extração de Classe](./docs/Refatoracao/refatoracao_extrair_classe.md)**
-
 ### 2. Substituir Método por Objeto-Método (Replace Method with Method Object)
 * **Alvo:** Método `Curador::pontuar_nome()`
 * **Solução:** A rotina procedural de acúmulo de pontos foi convertida na classe autônoma `PontuadorNome`. Os cálculos e pesos ganharam um ciclo de vida próprio e atributos de instância dedicados, o que protegeu a classe mãe contra o acúmulo de variáveis temporárias.
 * **Documentação:** **[Relatório de Objeto-Método](./docs/Refatoracao/refatoracao_objeto_metodo.md)**
-
 ### 3. Extrair Método (Extract Method)
 * **Alvo:** Método `Curador::assinatura()`
-* **Solução:** O bloco condicional complexo encarregado de identificar a posição do sobrenome do autor foi movido para o método privado `_extrair_sobrenome()`. Essa extração tornou o fluxo do gerador de assinaturas totalmente linear, previsível e declarativo.
+* **Solução:** O corpo procedural foi decomposto nos métodos privados `_tokenizar_nome()`, `_extrair_sobrenome()` e `_obter_primeira_inicial()`, cada um responsável por uma etapa (tokenização, identificação do sobrenome e coleta da primeira inicial). Essa extração tornou o fluxo do gerador de assinaturas mais linear, previsível e declarativo.
 * **Documentação:** **[Relatório de Extração de Método](./docs/Refatoracao/refatoracao_extrair_metodo.md)**
-
 ---
-
+ 
 ### Impacto e Validação Arquitetural
-
+ 
 A suíte original de testes automatizados do projeto funcionou como uma rede de segurança durante todo o processo. Nenhuma assinatura de contrato público sofreu alteração, o que garantiu a estabilidade total do ecossistema de software.
-
-* **Testes Executados:** 184 asserções via Pytest.
+ 
+* **Testes Executados:** 237 asserções (incluindo as 184 originais) via Pytest.
 * **Taxa de Sucesso:** 100% de aprovação (barra verde preservada).
 * **Manutenibilidade:** Código em conformidade com o Princípio de Responsabilidade Única (SRP).
-
 O balanço completo da evolução do design e da qualidade do código consta no **[Relatório Final de Refatoração](./docs/Refatoracao/relatorio_final_refatoracao.md)**.
+ 
