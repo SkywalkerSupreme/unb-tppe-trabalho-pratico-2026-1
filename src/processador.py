@@ -1,3 +1,6 @@
+# [Refact] Extrair Classe: Curador 
+
+
 import unicodedata
 
 PARTICULAS = {"de", "da", "do", "das", "dos"}

@@ -1,12 +1,11 @@
 # src/curador.py
 import re
 from src.processador import ProcessadorTextoCientifico, PARTICULAS
-
-class FormatoInvalidoError(Exception):
-    pass
-
-class IdInvalidoError(Exception):
-    pass
+from src.validador import (
+    ValidadorRegistros,
+    FormatoInvalidoError,
+    IdInvalidoError,
+)
 
 
 class PontuadorNome:
@@ -38,6 +37,7 @@ class Curador:
 
     def __init__(self):
         self._processador_texto = ProcessadorTextoCientifico()
+        self._validador = ValidadorRegistros()
 
     def remover_acentos(self, texto):
         return self._processador_texto.remover_acentos(texto)
@@ -247,54 +247,9 @@ class Curador:
         return dict(lista_pares_ordenados)
 
     def obter_id_ouro(self, autores):
-        if autores is None:
-            return None
-            
-        ids = []
-        for autor in autores:
-            if isinstance(autor, dict):
-                id_registro = autor.get("id")
-            else:
-                id_registro = None
-                
-            if id_registro is None:
-                raise IdInvalidoError()
-                
-            if not isinstance(id_registro, int):
-                raise IdInvalidoError()
-                
-            if id_registro <= 0:
-                raise IdInvalidoError()
-                
-            ids.append(id_registro)
-            
-        if len(ids) == 0:
-            return None
-            
-        return min(ids)
+        """Delegação para a classe extraída ValidadorRegistros."""
+        return self._validador.obter_id_ouro(autores)
 
     def processar_base_dados(self, dados):
-        if dados is None:
-            raise FormatoInvalidoError()
-            
-        if isinstance(dados, list) and len(dados) == 0:
-            raise FormatoInvalidoError()
-            
-        for registro in dados:
-            if not isinstance(registro, dict):
-                raise FormatoInvalidoError()
-                
-            if "id" not in registro:
-                raise FormatoInvalidoError()
-                
-            if "nome" not in registro:
-                raise FormatoInvalidoError()
-                
-            id_atual = registro["id"]
-            if not isinstance(id_atual, int):
-                raise FormatoInvalidoError()
-                
-            if id_atual <= 0:
-                raise IdInvalidoError()
-                
-        return True
+        """Delegação para a classe extraída ValidadorRegistros."""
+        return self._validador.processar_base_dados(dados)
