@@ -60,39 +60,50 @@ class Curador:
     def _expandir_iniciais(self, token):
         return self._processador_texto.expandir_iniciais(token)
 
-    def _extrair_sobrenome(self, tokens, invertido_por_virgula):
-        """Método Extraído: Isola o sobrenome principal conforme a estrutura dos tokens."""
-        if invertido_por_virgula:
-            return tokens[0], tokens[1:]
-        
-        if self._eh_inicial(tokens[-1]) and not self._eh_inicial(tokens[0]):
-            return tokens[0], tokens[1:]
-            
-        return tokens[-1], tokens[:-1]
-
-    def signature(self, nome):
-        return self.assinatura(nome)
-
-    def assinatura(self, nome):
+    def _tokenizar_nome(self, nome):
+        """Método Extraído: normaliza o nome e o quebra em tokens estruturais.
+        """
         nome = self.normalizar_nome(nome)
         nome_limpo = self.remover_acentos(nome).upper()
         invertido_por_virgula = "," in nome_limpo
         nome_limpo = nome_limpo.replace(",", " ")
 
         tokens = [t for t in nome_limpo.split() if t.lower() not in PARTICULAS]
+        return tokens, invertido_por_virgula
+
+    def _extrair_sobrenome(self, tokens, invertido_por_virgula):
+        """Método Extraído: isola o sobrenome principal conforme a estrutura dos tokens.
+        """
+        if invertido_por_virgula:
+            return tokens[0], tokens[1:]
+
+        if self._eh_inicial(tokens[-1]) and not self._eh_inicial(tokens[0]):
+            return tokens[0], tokens[1:]
+
+        return tokens[-1], tokens[:-1]
+
+    def _obter_primeira_inicial(self, tokens):
+        """Método Extraído: deriva a primeira inicial a partir dos tokens restantes.
+        """
+        for token in tokens:
+            if self._eh_inicial(token):
+                expandidas = self._expandir_iniciais(token)
+                if expandidas:
+                    return expandidas[0]
+            elif token:
+                return token[0]
+        return ""
+
+    def signature(self, nome):
+        return self.assinatura(nome)
+
+    def assinatura(self, nome):
+        tokens, invertido_por_virgula = self._tokenizar_nome(nome)
         if not tokens:
             return ""
 
         sobrenome, restantes = self._extrair_sobrenome(tokens, invertido_por_virgula)
-        
-        iniciais = []
-        for token in restantes:
-            if self._eh_inicial(token):
-                iniciais.extend(self._expandir_iniciais(token))
-            else:
-                iniciais.append(token[0])
-
-        primeira_inicial = iniciais[0] if iniciais else ""
+        primeira_inicial = self._obter_primeira_inicial(restantes)
         return f"{sobrenome}|{primeira_inicial}"
 
     def pontuar_nome(self, nome):
